@@ -1,0 +1,70 @@
+name: Bug Report
+description: Report broken behavior or unexpected output from ai-localization-demo.
+labels: ["bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please complete the template — incomplete reports will be closed.
+
+  - type: input
+    id: summary
+    attributes:
+      label: One-line summary
+      placeholder: e.g. /v1/translate returns 500 for source='auto'
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start uvicorn with provider=openai
+        2. POST /v1/translate with ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: dropdown
+    id: provider
+    attributes:
+      label: Provider in use
+      options:
+        - openai
+        - anthropic
+        - ollama
+        - mock
+    validations:
+      required: true
+
+  - type: input
+    id: versions
+    attributes:
+      label: Versions (Python, Node, OS)
+      placeholder: Python 3.12.4 · Node 20.11 · macOS 14.5
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or stack trace
+      render: shell
+    validations:
+      required: false

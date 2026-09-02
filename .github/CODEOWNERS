@@ -1,0 +1,17 @@
+# CODEOWNERS — automatically requested reviewers per path
+# Lines starting with `#` are comments.
+
+# Default owners for everything not matched below
+* @Zekiog
+
+# Backend requires Python + FastAPI familiarity
+/backend/ @Zekiog
+/backend/app/translate/ @Zekiog
+
+# Frontend requires TypeScript + i18n familiarity
+/frontend/ @Zekiog
+
+# Workflows, infra, and meta
+/.github/ @Zekiog
+/AGENTS.md @Zekiog
+/README.md @Zekiog

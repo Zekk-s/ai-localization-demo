@@ -1,0 +1,45 @@
+name: Feature Request
+description: Propose a new capability for ai-localization-demo.
+labels: ["enhancement"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the feature you want, why it matters, and how it should behave.
+
+  - type: input
+    id: title
+    attributes:
+      label: Short title
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Public API impact
+      placeholder: New endpoint? Changed schema? New env var?
+    validations:
+      required: false
