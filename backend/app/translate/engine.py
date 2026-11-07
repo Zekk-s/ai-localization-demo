@@ -1,8 +1,4 @@
-"""Provider-agnostic translation engine.
-
-The engine returns a dict compatible with `TranslateResponse` and never raises for
-provider-level errors — those are caught, logged, and re-raised as `RuntimeError`.
-"""
+"""Pick the translation provider from settings and cache the instance."""
 
 from __future__ import annotations
 

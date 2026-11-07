@@ -1,8 +1,4 @@
-"""Settings loaded from environment variables.
-
-Never hard-code credentials. Provide `.env.example` instead and copy to `.env` for
-local development.
-"""
+"""Settings from environment variables and an optional `.env` in the working directory."""
 
 from __future__ import annotations
 

@@ -8,7 +8,7 @@
 /backend/ @Zekiog
 /backend/app/translate/ @Zekiog
 
-# Frontend requires TypeScript + i18n familiarity
+# Frontend page
 /frontend/ @Zekiog
 
 # Workflows, infra, and meta

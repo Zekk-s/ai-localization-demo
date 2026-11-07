@@ -1,4 +1,4 @@
-"""Ollama local provider — fully self-hosted translation."""
+"""HTTP client for an Ollama server at OLLAMA_BASE_URL."""
 
 from __future__ import annotations
 
