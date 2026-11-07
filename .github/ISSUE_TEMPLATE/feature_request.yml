@@ -1,12 +1,12 @@
-name: Feature Request
-description: Propose a new capability for ai-localization-demo.
+name: Feature request
+description: Suggest a change to the files in this repository.
 labels: ["enhancement"]
 assignees: []
 body:
   - type: markdown
     attributes:
       value: |
-        Describe the feature you want, why it matters, and how it should behave.
+        Say which file or route the change would touch, and what the behavior should be.
 
   - type: input
     id: title
@@ -18,28 +18,28 @@ body:
   - type: textarea
     id: problem
     attributes:
-      label: What problem does this solve?
+      label: What should change?
     validations:
       required: true
 
   - type: textarea
     id: proposal
     attributes:
-      label: Proposed solution
+      label: Proposed behavior
     validations:
       required: true
 
   - type: textarea
     id: alternatives
     attributes:
-      label: Alternatives considered
+      label: Alternatives
     validations:
       required: false
 
   - type: textarea
     id: impact
     attributes:
-      label: Public API impact
-      placeholder: New endpoint? Changed schema? New env var?
+      label: Routes or environment variables
+      placeholder: Which route, request field, or env var would change?
     validations:
       required: false

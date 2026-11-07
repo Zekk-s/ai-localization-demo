@@ -1,7 +1,4 @@
-"""FastAPI entry point for ai-localization-demo.
-
-Wires routers, middleware, and observability. All public routes live under /v1/*.
-"""
+"""FastAPI app: `/`, `/healthz`, `/v1/locales`, translate routes, and `/metrics`."""
 
 from __future__ import annotations
 
@@ -23,10 +20,9 @@ from app.routers import health, translate
 app = FastAPI(
     title="ai-localization-demo",
     version=os.environ.get("APP_VERSION", "0.1.0"),
-    description="Provider-agnostic AI translation reference.",
+    description="Translation HTTP API. Default provider is mock.",
 )
 
-# CORS — strict by default; env-configured origins.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -64,7 +60,7 @@ async def metrics() -> Response:
 
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception) -> Response:
-    """Return a stable error envelope; never leak stack traces in prod."""
+    """JSON error body. Includes exception text only when log_level is debug."""
     if settings.log_level == "debug":
         return JSONResponse(
             status_code=500,

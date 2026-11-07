@@ -1,63 +1,50 @@
-# AGENTS.md — Working Agreement for AI Agents and Human Contributors
+# AGENTS.md
 
-This file governs how AI agents (Copilot, Claude, Cursor, etc.) and humans contribute to
-`ai-localization-demo`. **Read before opening a PR.**
+Notes for people and agents editing this repository. Describe the behavior that is in the files. Do not add docs for routes, providers, clients, or modules that are not in the tree.
 
-## Scope
+## What is here
 
-- This repo ships a production-shaped FastAPI reference for AI-driven localization.
-- Out of scope: business landing pages, marketing copy, deep model fine-tuning.
+- `backend/app` is a FastAPI app. Routes are in `main.py`, `routers/health.py`, and `routers/translate.py`.
+- `LOCALIZATION_PROVIDER` is defined in `backend/app/config.py` and read by `get_engine()` in `backend/app/translate/engine.py`.
+- Locale codes the API accepts are the keys of `SUPPORTED_LOCALES` in `backend/app/locales.py`.
+- `frontend/src/App.tsx` loads `GET /v1/locales` and posts `POST /v1/translate` on submit.
+- `scripts/smoke.py` calls a running server. It is not part of CI.
+- `README.md` lists the routes, env vars, and dependencies.
 
-## Hard rules
+## Secrets
 
-1. **Never commit `.env`, API keys, or real credentials.** Use `.env.example` only.
-2. **Never add a new provider without updating `LOCALIZATION_PROVIDER` docs and tests.**
-3. **Never hard-code locale strings outside `app/locales.py`.**
-4. **Public surface lives under `/v1/*`.** Internal helpers stay under `/internal/*`.
-5. **No telemetry or analytics keys** in the demo frontend.
+Do not commit `.env`, API keys, or real credentials. `.gitignore` ignores `.env`. Placeholders belong in `.env.example`. Provider keys are read by the backend provider modules. Do not put them in `frontend/`.
 
-## Workflow
+## Commands
 
-```text
-issue → branch → PR → CI green → human review → squash merge to main
+From `backend/` (this is also the CI working directory, and the directory where `import app` works):
+
+```bash
+pip install -r requirements.txt
+pytest -q --cov=app --cov-report=term-missing
+ruff check app tests
+uvicorn app.main:app --reload --port 8000
 ```
 
-- Branch names: `feat/<scope>`, `fix/<scope>`, `chore/<scope>`, `docs/<scope>`.
-- Commit subjects ≤ 72 chars, body wraps at 100.
-- One logical change per PR. Reformatting goes in a separate `chore:` PR.
-- Agents propose via PR. **Humans approve before merge to `main`.**
+CI sets `LOCALIZATION_PROVIDER=mock` for pytest. The checked-in tests use the mock provider. `ruff check app tests` currently reports an unused import of `SUPPORTED_LOCALES` in `backend/app/routers/translate.py`. There is no coverage floor in the repo.
 
-## Testing
+From `frontend/`:
 
-- Backend: `pytest backend/tests` — must pass 100 %.
-- Frontend: `npm run test` — must pass 100 %.
-- Smoke test: `python scripts/smoke.py` against a running uvicorn.
-- Coverage floor: 80 % for `app/translate/`, 60 % repo-wide.
+```bash
+npm install
+npm run dev
+```
 
-## Code style
+`package.json` also defines `build`, `preview`, `lint`, and `test`. The tree has no `package-lock.json`, no ESLint config, and no frontend test file. `.github/workflows/ci.yml` still runs `npm ci`, `npm run lint`, `npx tsc --noEmit`, and `npm run test -- --run` on Node 20. The backend CI job uses Python 3.12.
 
-- Python: `ruff` + `black` (line-length 100). Type hints mandatory on public functions.
-- TypeScript: `eslint` (Airbnb) + `prettier`. `strict: true` in `tsconfig.json`.
-- Imports sorted by `isort` / `eslint-plugin-import`.
+## Tools that are present
 
-## Review expectations
+- `ruff` is in `backend/requirements.txt`. CI runs `ruff check`. There is no `ruff` config file.
+- `frontend/tsconfig.json` sets `"strict": true`.
+- ESLint and the TypeScript ESLint packages are devDependencies. Prettier, `black`, and `isort` are not dependencies.
 
-For a PR to be merged, the description must answer:
+## Pull requests
 
-- What does this change do, and why now?
-- Which tests cover it?
-- What could break?
-- Does it touch the public API or `/v1/*` contracts?
-- Are there new environment variables? (Update `.env.example`.)
+`.github/PULL_REQUEST_TEMPLATE.md` is the template. `.github/workflows/ci.yml` runs on pull requests into `main`.
 
-## Observability
-
-- Every public endpoint emits a structured log line with `request_id`, `latency_ms`,
-  `provider`, `tokens_in`, `tokens_out`.
-- Errors include a stack trace only when `LOG_LEVEL=debug`.
-
-## Out of band
-
-- Coordination with sibling repos under `@Zekk-s` happens via PR cross-links,
-  not direct pushes.
-- Production secrets are managed by the deployment platform, never this repo.
+When a change adds an environment variable, update `.env.example` and `backend/app/config.py` together. When a change adds a locale code the API should accept, update `backend/app/locales.py` and the tests that assert the locale list.
